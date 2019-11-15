@@ -1,1 +1,1 @@
-a draft ide for haiway rtos.
+a draft ide running on django server for haiway rtos.
