@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Haiway IDE</title>
+
+        <script type="text/javascript" src="{% static "js/blockly_compressed.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/blocks_compressed.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/en.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/javascript_compressed.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/FileSaver.js" %}"></script>
+        <script type="text/javascript" src="{% static "js/code_clean.js" %}"></script>
+
+        <style>
+            body {
+                background-color: #fff;
+                font-family: sans-serif;
+            }
+            h1 {
+                font-weight: normal;
+                font-size: 140%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1> Haiway可视化编程IDE </h1>
+
+        <p>
+            <button onclick="DownloadCode()" id="DownloadButton" >代码下载</button>
+        </p>
+
+{#        blockly div #}
+        <div id="blocklyDiv" style="height: 480px; width: 60%"></div>
+
+{#        toolbox #}
+        <xml id="toolbox" style="display: none">
+            <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+              <block type="controls_if"></block>
+              <block type="logic_compare"></block>
+              <block type="logic_operation"></block>
+              <block type="logic_negate"></block>
+              <block type="logic_boolean"></block>
+            </category>
+            <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+              <block type="controls_repeat_ext">
+                <value name="TIMES">
+                  <block type="math_number">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+              <block type="controls_whileUntil"></block>
+            </category>
+            <category name="Math" colour="%{BKY_MATH_HUE}">
+              <block type="math_number">
+                <field name="NUM">123</field>
+              </block>
+              <block type="math_arithmetic"></block>
+              <block type="math_single"></block>
+            </category>
+            <category name="Text" colour="%{BKY_TEXTS_HUE}">
+              <block type="text"></block>
+              <block type="text_length"></block>
+              <block type="text_print"></block>
+              <block type="text_prompt_ext">
+                <value name="TEXT">
+                  <block type="text"></block>
+                </value>
+              </block>
+            </category>
+            <sep></sep>
+            <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+            </category>
+            <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+            </category>
+          </xml>
+
+    </body>
+
+
+
+    <script>
+
+{#        init Blockly#}
+        var workspace = Blockly.inject('blocklyDiv', {media: "{% static "media/" %}", toolbox: document.getElementById('toolbox')});
+
+{#        dowload the code blockly generates#}
+        function DownloadCode() {
+            var dirty_code = Blockly.JavaScript.workspaceToCode(workspace);
+            console.log(dirty_code);
+            var clean_code = clean_dirty_code(dirty_code);
+            console.log(clean_code);
+            var file = new File([clean_code], "BlocklyJsCode.txt", { type: "text/plain;charset=utf-8" });
+            saveAs(file);
+        }
+
+
+
+    </script>
+
+
+</html>
